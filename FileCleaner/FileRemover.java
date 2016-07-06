@@ -12,7 +12,7 @@ public class FileRemover {
 		File downloads = new File(path + "/Downloads");
 		File[] dirFiles = downloads.listFiles();
 		String fileName;
-		int cutoff = 30;
+		long cutoff = 30;
 
 		System.out.println("The following files in your Downloads folder are over " + cutoff +  " days old: ");
 
@@ -22,7 +22,7 @@ public class FileRemover {
 			
 			if(diff > cutoff * 24 * 60 * 60 * 1000) 
 					System.out.println(fileName);
-			
+		}	
 		System.out.println("Do you wish to delete these files?[y/n]");
 		decision = input.next();
 		if(decision.equals("n"))
@@ -30,13 +30,15 @@ public class FileRemover {
 
 		System.out.println("Are you sure? These changes are irreversible[y/n]");
 		decision = input.next();
-
-		if(decision.equals("y")) {
-			for(i = 0; i < dirFiles.length; i++) {
+		if(decision.equals("n"))
+			System.exit(0);
+		
+		else if(decision.equals("y")) {
+			for(int i = 0; i < dirFiles.length; i++) {	
+				long diff = new Date().getTime() - dirFiles[i].lastModified();	
 				
-				if(diff > cutoff * 24 * 60 * 60 * 1000) 
-						dirFiles[i].delete();
-				}
+				if(diff > cutoff * 24 * 60 * 60 * 1000) 					
+					dirFiles[i].delete();
 			}
 		}
 		input.close();
